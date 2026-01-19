@@ -1,99 +1,109 @@
 # Younion-Data-Cleaning
 
-
-This repository contains the SQL script used to **clean, standardize, and consolidate marketing and CRM data** for the Younion data engineering assignment.
-
-The main goal of this project is to transform raw marketing and CRM data into **clean, analytics-ready tables** that answer key business questions such as lead attribution, channel performance, and cost per lead.
+This repository contains SQL scripts used to clean, transform, and prepare marketing, CRM, and interaction data for analytics. The scripts convert raw staging tables into clean, consistent, and analytics-ready tables for lead attribution and performance analysis.
 
 ---
 
-## 🧠 Project Context
+## 📁 Repository Contents
 
-Younion receives data from multiple sources — CRM, marketing platforms, and web events — that are not yet suitable for analysis.  
-This repository demonstrates how to **clean and integrate data using SQL** by applying:
-- Deduplication
-- Standardization
-- Date normalization
-
-The final cleaned data can be used for further analytics (e.g., reporting dashboards or SQL reporting).
+| File | Description |
+|------|-------------|
+| `cleaning the data.sql` | SQL script that performs data cleaning and transformations on source (staging) tables. |
+| `First interaction table.sql` | SQL script to determine the **first interaction channel/source** for each lead. |
 
 ---
 
-## 🗂 Repository Contents
+## 🧠 Project Summary
 
-| File                    | Description                                                                       |
-|-------------------------|-----------------------------------------------------------------------------------|
-| `cleaning the data.sql` | SQL script that performs data cleaning and transformation steps on source tables. |
----------------------------------------------------------------------------------------------------------------
+Marketing, CRM, and web event data for Younion are fragmented and inconsistent across source systems. This project demonstrates how to apply SQL transformations to:
 
-## 📌 Data Cleaning Objectives
+- Deduplicate raw data
+- Standardize identifiers and fields (e.g., email, channels)
+- Clean event timestamps and campaign fields
+- Identify first interaction channels for leads
+- Produce analytics tables for reporting and BI
 
-The SQL script includes steps to:
-1. Load raw CRM and interaction data (assumed to be in staging tables).
-2. Remove duplicates and inconsistent entries.
-3. Standardize key fields such as email and campaign identifiers.
-4. Create analytical tables that support business reporting.
-5. Ensure cleaned data is ready for downstream queries and dashboards.
+The end result is clean data that answers core business metrics such as:
 
----
-
-## 🧱 Data Model Overview
-
-The script cleans and prepares the following logical entities:
-
-### Raw Tables (Staging)
-These represent raw data ingested from source CSVs or systems (CRM, marketing, web events).
-
-### Cleaned Tables
-Transformed and standardized tables with:
-- Consistent identifier formats
-- Unified email keys
-- Normalized channel and campaign names
-
-### Analytics Tables
-Optimized tables for answering business questions such as:
 - Unique leads by channel
-- Cost per lead breakdown
-- First interaction source per lead
+- Cost per lead per channel
+- First source of interaction for each lead
 
 ---
 
-## 🚀 How to Run the SQL Script
+## 🗂 Data Cleaning & Transformation Workflow
 
-1. **Set up your database**  
-   Create the required database (e.g., in PostgreSQL or MySQL).
+1. **Load raw data into staging tables**  
+   Load CSV data from source systems (CRM, marketing campaigns, web events) into staging tables (e.g., `stg_crm_leads`, `stg_marketing_campaigns`, `stg_web_events`).
 
-2. **Load raw source data**  
-   Create staging tables and load the CSVs (CRM leads, marketing campaigns, web events).
+2. **Run cleaning script (`cleaning the data.sql`)**  
+   This script:
+   - Standardizes common fields (e.g., `email`)
+   - Removes duplicate or invalid records
+   - Normalizes channel and campaign names
+   - Creates clean tables for analysis
 
-3. **Run the cleaning script**  
-   Execute `cleaning the data.sql` in your SQL editor or command line tool.
-
-4. **Verify results**  
-   Inspect the cleaned tables for data quality checks and consistency.
-
----
-
-## 🧼 Data Cleaning Highlights
-
-The cleaning script handles:
-- Normalizing email keys for joins
-- Removing duplicate records
-- Standardizing channel/campaign naming conventions
-- Handling null or invalid values
-- Preparing fact and dimension tables for analytics
+3. **Run first interaction script (`First interaction table.sql`)**  
+   This script aggregates interactions across sources and calculates the **first touch** or **first interaction source** for each lead. It identifies the earliest interaction across CRM creation, marketing touches, and web events.
 
 ---
 
-## 📊 Business Value
+## 🧾 SQL Script Details
 
-Once cleaned, the data can be used to answer key marketing questions:
-- How many unique leads did each channel generate?
-- What is the cost per lead per channel?
-- Which channel was the first interaction source for each lead?
-- What data quality issues were found and addressed?
+### 📌 `cleaning the data.sql`
+
+This script:
+- Loads and cleans raw staging data
+- Applies deduplication logic
+- Standardizes identifiers
+- Outputs clean intermediate tables for downstream queries
+
+**Key transformations include:**
+- Lowercasing and trimming emails
+- Normalizing channel names
+- Removing invalid dates and costs
 
 ---
+
+### 📌 `First interaction table.sql`
+
+This script identifies the **first interaction channel/source** for each lead by:
+- Combining interactions from cleaned CRM, marketing, and web tables
+- Ordering interactions by timestamp
+- Selecting the earliest interaction for each unique lead
+
+The output helps answer the business question:
+> *“Which channel did the lead interact with first?”*
+
+This is especially useful for marketing attribution and reporting.
+
+---
+
+## 📊 Cleaned Outputs
+
+After both scripts execute, the database contains analytics-ready tables such as:
+
+- Cleaned CRM leads
+- Normalized marketing interactions
+- Consolidated interaction history
+- First interaction per lead
+
+These outputs enable deeper analytics and reporting in BI platforms such as Power BI or Looker Studio.
+
+---
+
+## 🛠 Requirements & Setup
+
+1. **Database**: PostgreSQL, MySQL, or compatible SQL database.
+2. **Staging Tables**: Load raw CSVs into staging tables before running scripts.
+3. **Execution Order**:
+   - Run `cleaning the data.sql`
+   - Then run `First interaction table.sql`
+
+---
+
+
+
 
 
 
